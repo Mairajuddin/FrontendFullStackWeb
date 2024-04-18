@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { FireApi } from "../Utils/fireApi";
 import { GoogleLogin } from "@react-oauth/google";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-
+import { useNavigate } from "react-router-dom";
 // import GoogleLoginButton from "../Utils/GoogleLoginButton";
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -24,34 +24,39 @@ const defaultTheme = createTheme();
 
 export default function Login() {
   const [credientials, setCredientials] = useState(null);
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const data = {
       email: form.get("email"),
       password: form.get("password"),
-      LoginWithGoogle: false,
+      LoginWithGoogle: true,
     };
     try {
       const response = await FireApi("login", "POST", data);
-      console.log(response);
+      console.log(response, "ajasjdaskdkadaskdkjasd");
+      const { token } = response;
+      if (token) {
+        localStorage.setItem("token", token);
+        // navigate("/home");
+      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (credientials) {
-        try {
-          const response = await FireApi("login", "POST", credientials);
-          console.log(response);
-        } catch (error) {
-          console.error("Error:", error);
-        }
+  const fetchData = async () => {
+    if (credientials) {
+      try {
+        const response = await FireApi("login", "POST", credientials);
+        console.log(response.data.token, "llsskaskdaskdask");
+        localStorage.setItem("token", response.data.token);
+      } catch (error) {
+        console.error("Error:", error);
       }
-    };
-
+    }
+  };
+  useEffect(() => {
     fetchData(); // Call the async function
   }, [credientials]);
 
@@ -131,6 +136,10 @@ export default function Login() {
               onSuccess={(credentialResponse) => {
                 setCredientials(credentialResponse);
                 console.log(credentialResponse);
+                if (credentialResponse.ok) {
+                  console.log("hello its workig good");
+                }
+                // navigate("/addinfo");
               }}
               onError={() => {
                 console.log("Login Failed");

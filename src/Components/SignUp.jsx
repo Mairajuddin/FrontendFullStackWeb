@@ -1,4 +1,3 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -26,6 +25,7 @@ export default function SignUp() {
       email: form.get("email"),
       password: form.get("password"),
       name: form.get("name"),
+      job: form.get("job"),
     };
     try {
       const response = await FireApi("register", "POST", data);
@@ -88,6 +88,16 @@ export default function SignUp() {
               label="Password"
               type="password"
               id="password"
+              autoComplete="current-password"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="job"
+              label="Job Title"
+              type="text"
+              id="job"
               autoComplete="current-password"
             />
             <FormControlLabel
