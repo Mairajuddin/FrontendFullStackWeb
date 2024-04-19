@@ -1,12 +1,15 @@
+import { useContext, useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-
+import UserContext from "../context/UserContext";
 import { FireApi } from "../Utils/fireApi";
 const ExtraInfoForSocialaAuthUser = () => {
+  const { handleSetState } = useContext(UserContext);
+  const [data, setdata] = useState();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -20,6 +23,7 @@ const ExtraInfoForSocialaAuthUser = () => {
     try {
       const response = await FireApi("user", "GET");
       console.log(response, "ajasjdaskdkadaskdkjasd");
+      setdata(response);
     } catch (error) {
       console.error("Error:", error);
     }

@@ -49,7 +49,6 @@ export default function Login() {
     if (credientials) {
       try {
         const response = await FireApi("login", "POST", credientials);
-        console.log(response.data.token, "llsskaskdaskdask");
         localStorage.setItem("token", response.data.token);
       } catch (error) {
         console.error("Error:", error);
@@ -89,8 +88,8 @@ export default function Login() {
               required
               fullWidth
               id="email"
-              label="Email Address"
               name="email"
+              label="Email Address"
               autoComplete="email"
               autoFocus
             />
